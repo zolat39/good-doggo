@@ -6,4 +6,12 @@ A tiny, dependency-free dog verdict app.
 
 Open `index.html` in a browser. No install or build step is needed.
 
-Choose Human (English) or Dog (Woof woofs), then select the verdict button to generate a random answer. Each dog is a good dog.
+
+## Publish with GitHub Pages
+
+1. In the repository on GitHub, open **Settings → Pages**.
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+3. Push to the `main` branch. The workflow deploys the site automatically; follow its progress in the **Actions** tab.
+4. Once the deployment finishes, share **https://zolat39.github.io/good-doggo/**.
+
+Future pushes to `main` update the published site.
