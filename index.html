@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f3e8">
+  <title>Good Dog Dept.</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand"><span class="brand-mark" aria-hidden="true">🐾</span> Good Dog Dept.</div>
+      <div class="language-toggle" role="group" aria-label="Choose language">
+        <button type="button" data-mode="human" aria-pressed="true">Human</button>
+        <button type="button" data-mode="dog" aria-pressed="false">Dog</button>
+      </div>
+    </header>
+
+    <main>
+      <p class="eyebrow" id="eyebrow">Official dog assessment</p>
+      <div class="dog-stamp" aria-hidden="true">🐶</div>
+      <h1 id="question">Is your dog a good dog?</h1>
+      <p class="prompt-note" id="note">A very serious question deserves a very serious answer.</p>
+      <div class="name-field">
+        <label id="name-label" for="dog-name">Your dog's name</label>
+        <input id="dog-name" type="text" maxlength="32" autocomplete="off" placeholder="e.g. Biscuit">
+      </div>
+      <button class="ask-button" id="ask" type="button">Get the verdict</button>
+      <p class="answer" id="answer" aria-live="polite" aria-atomic="true"></p>
+    </main>
+
+    <footer>
+      <span id="footer-left">Certified by absolutely everyone.</span>
+      <span id="footer-right">All dogs pass. Results may be extra adorable.</span>
+    </footer>
+  </div>
+
+  <script>
+    const verdicts = ["good boi", "best lil baby", "goodest pupper", "bestest doggo"];
+    const woofs = ["woof!", "woof woof!", "ruff woof!", "arf arf woof!"];
+    const copy = {
+      human: {
+        eyebrow: "Official dog assessment",
+        question: "Is your dog a good dog?",
+        nameLabel: "Your dog's name",
+        note: "A very serious question deserves a very serious answer.",
+        button: "Get the verdict",
+        again: "Ask again",
+        waiting: "",
+        footerLeft: "Certified by absolutely everyone.",
+        footerRight: "Results may be extra adorable."
+      },
+      dog: {
+        eyebrow: "Very official woof-sessment",
+        question: "Woof woof? Woof woof woof?",
+        nameLabel: "Your doggo's name",
+        note: "Sniff sniff. A very important question for a very good dog.",
+        button: "Hear the verdict",
+        again: "Woof again",
+        waiting: "",
+        footerLeft: "Certified by the whole pack.",
+        footerRight: "Every dog is a good dog. No take-backsies."
+      }
+    };
+
+    const languageButtons = [...document.querySelectorAll("[data-mode]")];
+    const answer = document.querySelector("#answer");
+    let mode = "human";
+    let verdictIndex = -1;
+
+    function renderCopy() {
+      const text = copy[mode];
+      const dogName = document.querySelector("#dog-name").value.trim();
+      document.documentElement.lang = mode === "human" ? "en" : "en-x-doggo";
+      document.querySelector("#eyebrow").textContent = text.eyebrow;
+      document.querySelector("#question").textContent = dogName
+        ? (mode === "human" ? `Is ${dogName} a good dog?` : `Woof woof, ${dogName}? Woof woof woof?`)
+        : text.question;
+      document.querySelector("#name-label").textContent = text.nameLabel;
+      document.querySelector("#note").textContent = text.note;
+      document.querySelector("#ask").textContent = verdictIndex < 0 ? text.button : text.again;
+      document.querySelector("#footer-left").textContent = text.footerLeft;
+      document.querySelector("#footer-right").textContent = text.footerRight;
+      answer.textContent = verdictIndex < 0 ? text.waiting : (mode === "human" ? verdicts[verdictIndex] : woofs[verdictIndex]);
+      languageButtons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.mode === mode));
+      });
+    }
+
+    languageButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        mode = button.dataset.mode;
+        renderCopy();
+      });
+    });
+
+    document.querySelector("#dog-name").addEventListener("input", renderCopy);
+
+    document.querySelector("#ask").addEventListener("click", () => {
+      verdictIndex = Math.floor(Math.random() * verdicts.length);
+      answer.classList.remove("is-visible");
+      void answer.offsetWidth;
+      answer.classList.add("is-visible");
+      renderCopy();
+    });
+  </script>
+</body>
+</html>
